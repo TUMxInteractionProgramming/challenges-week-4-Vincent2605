@@ -1,53 +1,58 @@
-/* #6 start the #external #action and say hello */
-console.log("App is alive");
+console.log('app is alive');
+console.log('current channel', currentChannel);
 
-/**
- * #6 #Switcher function for the #channels name in the right app bar
- * @param channelName Text which is set
- */
-function switchChannel(channelName) {
-    //Log the channel switch
-    console.log("Tuning in to channel", channelName);
+var currentChannel;
 
-    //Write the new channel to the right app bar
-    document.getElementById('channel-name').innerHTML = channelName;
+var currentLocation = {
+    longitude: 48.264976,
+    latitude: 11.668641,
+    what3words: "dose.verse.lunged"
+};
 
-    //#6 change the #channel #location
-    document.getElementById('channel-location').innerHTML = 'by <a href="http://w3w.co/upgrading.never.helps" target="_blank"><strong>upgrading.never.helps</strong></a>';
+function switchChannel(channelVar, channelName, channelCreator) {
+    console.log('Turning into channel', channelVar);
+    currentChannel = channelVar;
+    console.log('current channel', currentChannel);
+    $('#rightside .app-bar span').html(channelName);
+    $('#rightside .app-bar strong').html('<a href="https://map.what3words.com/'+channelCreator+'" target="_blank">'+
+    channelCreator+'</a>');
+    $('#channels li').removeClass('selected-channel');
+    $('#channels li:contains('+channelName+')').addClass('selected-channel');
+    $('#rightside .app-bar i').removeClass('fas fa-star');
+    $('#rightside .app-bar i').removeClass('far fa-star');
+    var starStatus = $(channelVar.starred).val();
+    var starStatus2 = (starStatus=true)? "fas fa-star": "far fa-star";
+    $('#rightside .app-bar i').addClass(starStatus2);
+};
+function likeChannel() {
+    $('#rightside .app-bar i').toggleClass('fas far');
+};
+function selectTab(tabID) {
+    $('#tab-bar button').removeClass('selected-tab');
+    $(tabID).addClass('selected-tab')
+    console.log('Changing to Tab ' + tabID)
+};
+function showEmojis()  {
+    $('#emojis').toggle();
+};
+function Message(text) {
+    createdBy = currentLocation.what3words;
+    latitude = currentLocation.latitude;
+    longitude = currentLocation.longitude;
+    createdOn = new Date();
+    expiresOn = '15';
+    // function () {
+    //     return new Date(Date.now().getTime() + 15*60000);
+    this.text = text;
+    own = true;
+};
+function sendMessage() {
+    var messageContent = $('#message-input').val();
+    var newMessage = new Message(messageContent);
+    console.log(newMessage);
+    $('<div class="message own-message"><h3><strong><a href="https://map.what3words.com/'+currentLocation.what3words+'">'+currentLocation.what3words+'</a></strong> '+createdOn+' <span class="remaining-time">'+expiresOn+'min left</span></h3><p>'+messageContent+' <button>+5min</button></p></div>').appendTo('#chat');
+    // createMessageElement(messageContent).appendTo('#chat');
+};
+function createMessageElement(content) { 
 
-    /* #6 #liking channels on #click */
-    $('#channel-star').attr('src', 'http://ip.lfe.mw.tum.de/sections/star-o.png');
-
-    /* #6 #highlight the selected #channel.
-       This is inefficient (jQuery has to search all channel list items), but we'll change it later on */
-    $('#channels li').removeClass('selected');
-    $('#channels li:contains(' + channelName + ')').addClass('selected');
-}
-
-/* #6 #liking a channel on #click */
-function star() {
-    $('#channel-star').attr('src', 'http://ip.lfe.mw.tum.de/sections/star.png');
-}
-
-/**
- * #6 #taptab selects the given tab
- * @param tabId #id of the tab
- */
-function selectTab(tabId) {
-    // #6 #taptab #remove selection from all buttons...
-    $('#tab-bar button').removeClass('selected');
-
-    //...#6 #taptab #log the new tab on change...
-    console.log('Changing to tab', tabId);
-
-    //...#6 #taptab #add selection to the given tab button, its id is passed via the #argument tabId
-    $(tabId).addClass('selected');
-}
-
-/**
- * #6 #toggle (show/hide) the emojis menu #smile
- */
-function toggleEmojis() {
-    /* $('#emojis').show(); // #show */
-    $('#emojis').toggle(); // #toggle
 }
